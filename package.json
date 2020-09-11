@@ -11,6 +11,10 @@
     "email": "contact@angelxehg.com",
     "url": "https://angelxehg.com/"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angelxehg/utzac-webapp"
+  },
   "license": "MIT",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
