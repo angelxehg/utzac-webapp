@@ -2,6 +2,6 @@
 
 Desarrollo de Aplicaciones Web
 
-## Instalación
-
 - Instalar dependencias `npm install`
+
+- Iniciar servidor `npm run start`
