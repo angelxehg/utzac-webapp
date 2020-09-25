@@ -1,17 +1,17 @@
 'use strict';
-var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://localhost:27017/proyecto';
+
+const mongoose = require('mongoose');
 
 var app = require('./app');
 var port = process.env.PORT || 8000;
 
-MongoClient.connect(url, { useUnifiedTopology: true }, function (err, obj) {
+mongoose.connect('mongodb://localhost:27017/proyecto', { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
   if (err) {
-    console.error(err);
+    throw err;
   } else {
-    console.log("Conexión exitosa");
-    app.listen(port, function () {
-      console.log("Servidor iniciado en el puerto " + port);
+    console.log("Connected to db");
+    app.listen(port, () => {
+      console.log("Server running at http://localhost:" + port)
     })
   }
 });
