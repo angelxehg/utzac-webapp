@@ -5,6 +5,10 @@ var BookController = require('../controllers/book');
 
 var api = express.Router();
 
-api.post('/book', BookController.saveBook);
+api.get('/books', BookController.getAll);
+api.post('/books', BookController.create);
+api.get('/books/:book', BookController.getOne);
+api.put('/books/:book', BookController.update);
+api.delete('/books/:book', BookController.destroy);
 
 module.exports = api;
