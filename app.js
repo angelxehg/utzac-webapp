@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 
 var authors = require('./routes/author');
 var books = require('./routes/book');
-var authorBooks = require('./routes/author-book');
 
 app.get('/', (req, res) => {
   res.send({
@@ -22,7 +21,6 @@ app.get('/', (req, res) => {
 
 app.use('/api', authors);
 app.use('/api', books);
-app.use('/api', authorBooks);
 
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
   if (err) {
