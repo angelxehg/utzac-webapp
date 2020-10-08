@@ -5,7 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 8000;
-const dbUrl = 'mongodb://localhost:27017/proyecto';
+const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/proyecto';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
