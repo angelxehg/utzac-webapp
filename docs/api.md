@@ -24,6 +24,18 @@ Las rutas para obtener los autores:
 
 - Eliminar un autor: `DELETE {{apiUrl}}/api/authors/{{author}}`
 
+### Libros de un autor
+
+- Obtener libros de un autor: `GET {{apiUrl}}/api/authors/{{author}}/books`
+
+- Relacionar un libro con el autor: `POST {{apiUrl}}/api/authors/{{author}}/books`
+
+  - `book`: ID del libro
+
+- Quitar relación de libro con el autor: `DELETE {{apiUrl}}/api/authors/{{author}}/books`
+
+  - `book`: ID del libro
+
 ## Libros
 
 Las rutas para obtener los libros:
@@ -41,3 +53,15 @@ Las rutas para obtener los libros:
   - `title`: Título del libro
 
 - Eliminar un libro: `DELETE {{apiUrl}}/api/books/{{book}}`
+
+### Autores de un libro
+
+- Obtener autores de un libro: `GET {{apiUrl}}/api/books/{{book}}/authors`
+
+- Relacionar un autor con el libro: `POST {{apiUrl}}/api/books/{{book}}/authors`
+
+  - `author`: ID del autor
+
+- Quitar relación de autor con el libro: `DELETE {{apiUrl}}/api/books/{{book}}/authors`
+
+  - `author`: ID del autor
