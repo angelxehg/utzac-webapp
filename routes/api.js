@@ -3,28 +3,28 @@
 const express = require('express');
 const router = express.Router();
 
-const AuthorController = require('../controllers/author');
-const BookController = require('../controllers/book');
-const AuthorBookController = require('../controllers/author-book');
+const authors = require('../controllers/author');
+const books = require('../controllers/book');
+const authorBooks = require('../controllers/author-book');
 
-router.get('/authors', AuthorController.getAll);
-router.post('/authors', AuthorController.create);
-router.get('/authors/:author', AuthorController.getOne);
-router.put('/authors/:author', AuthorController.update);
-router.delete('/authors/:author', AuthorController.destroy);
+router.get('/authors', authors.index);
+router.post('/authors', authors.store);
+router.get('/authors/:author', authors.show);
+router.put('/authors/:author', authors.update);
+router.delete('/authors/:author', authors.destroy);
 
-router.get('/authors/:author/books', AuthorBookController.getAuthorBooks);
-router.post('/authors/:author/books', AuthorBookController.addBookToAuthor);
-router.delete('/authors/:author/books', AuthorBookController.removeBookFromAuthor);
+router.get('/authors/:author/books', authorBooks.getAuthorBooks);
+router.post('/authors/:author/books', authorBooks.addBookToAuthor);
+router.delete('/authors/:author/books', authorBooks.removeBookFromAuthor);
 
-router.get('/books', BookController.getAll);
-router.post('/books', BookController.create);
-router.get('/books/:book', BookController.getOne);
-router.put('/books/:book', BookController.update);
-router.delete('/books/:book', BookController.destroy);
+router.get('/books', books.index);
+router.post('/books', books.store);
+router.get('/books/:book', books.show);
+router.put('/books/:book', books.update);
+router.delete('/books/:book', books.destroy);
 
-router.get('/books/:book/authors', AuthorBookController.getBookAuthors);
-router.post('/books/:book/authors', AuthorBookController.addAuthorToBook);
-router.delete('/books/:book/authors', AuthorBookController.removeAuthorFromBook);
+router.get('/books/:book/authors', authorBooks.getBookAuthors);
+router.post('/books/:book/authors', authorBooks.addAuthorToBook);
+router.delete('/books/:book/authors', authorBooks.removeAuthorFromBook);
 
 module.exports = router;

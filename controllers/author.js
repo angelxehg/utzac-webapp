@@ -3,7 +3,7 @@
 const Author = require('../models/author');
 const message = require('../models/message');
 
-function getAll(req, res) {
+const index = (req, res) => {
   Author.find().then((authors) => {
     return res.send(authors);
   }).catch((err) => {
@@ -11,19 +11,7 @@ function getAll(req, res) {
   })
 }
 
-function getOne(req, res) {
-  const id = req.params.author;
-  Author.findById(id).then((author) => {
-    if (!author) {
-      return res.status(400).send(message.error('Can\'t get author', err));
-    }
-    return res.send(author);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get author', err));
-  })
-}
-
-function create(req, res) {
+const store = (req, res) => {
   const params = req.body;
   if (params.name == '' || params.name == null) {
     return res.status(400).send(message.missing('name'));
@@ -41,7 +29,19 @@ function create(req, res) {
   })
 }
 
-function update(req, res) {
+const show = (req, res) => {
+  const id = req.params.author;
+  Author.findById(id).then((author) => {
+    if (!author) {
+      return res.status(400).send(message.error('Can\'t get author', err));
+    }
+    return res.send(author);
+  }).catch((err) => {
+    return res.status(400).send(message.error('Can\'t get author', err));
+  })
+}
+
+const update = (req, res) => {
   const id = req.params.author;
   const params = req.body;
   if (params.name == '' || params.name == null) {
@@ -63,7 +63,7 @@ function update(req, res) {
   });
 }
 
-function destroy(req, res) {
+const destroy = (req, res) => {
   const id = req.params.author;
   Author.findByIdAndDelete(id).then(() => {
     return res.status(204).send();
@@ -73,9 +73,9 @@ function destroy(req, res) {
 }
 
 module.exports = {
-  getAll,
-  getOne,
-  create,
+  index,
+  show,
+  store,
   update,
   destroy
 };
