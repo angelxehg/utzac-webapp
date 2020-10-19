@@ -5,7 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 8000;
-const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/proyecto';
+const database = process.env.DATABASE_URL || 'mongodb://localhost:27017/utzac-webapp';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 app.use('/api', authors);
 app.use('/api', books);
 
-mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
+mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
   if (err) {
     throw err;
   } else {
