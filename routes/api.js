@@ -7,24 +7,32 @@ const authors = require('../controllers/author');
 const books = require('../controllers/book');
 const authorBooks = require('../controllers/author-book');
 
-router.get('/authors', authors.index);
-router.post('/authors', authors.store);
-router.get('/authors/:author', authors.show);
-router.put('/authors/:author', authors.update);
-router.delete('/authors/:author', authors.destroy);
+router.route('/authors')
+  .get(authors.index)
+  .post(authors.store);
 
-router.get('/authors/:author/books', authorBooks.indexBooks);
-router.post('/authors/:author/books/:book', authorBooks.associate);
-router.delete('/authors/:author/books/:book', authorBooks.unlink);
+router.route('/authors/:author')
+  .get(authors.show)
+  .post(authors.update)
+  .delete(authors.destroy);
 
-router.get('/books', books.index);
-router.post('/books', books.store);
-router.get('/books/:book', books.show);
-router.put('/books/:book', books.update);
-router.delete('/books/:book', books.destroy);
+router.route('/authors/:author/books')
+  .get(authorBooks.indexBooks)
+  .post(authorBooks.associate)
+  .delete(authorBooks.unlink);
 
-router.get('/books/:book/authors', authorBooks.indexAuthors);
-router.post('/books/:book/authors/:author', authorBooks.associate);
-router.delete('/books/:book/authors/:author', authorBooks.unlink);
+router.route('/books')
+  .get(books.index)
+  .post(books.store);
+
+router.route('/books/:book')
+  .get(books.show)
+  .post(books.update)
+  .delete(books.destroy);
+
+router.route('/books/:book/authors')
+  .get(authorBooks.indexAuthors)
+  .post(authorBooks.associate)
+  .delete(authorBooks.unlink);
 
 module.exports = router;

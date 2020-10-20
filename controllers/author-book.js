@@ -22,8 +22,8 @@ const indexAuthors = (req, res) => {
 };
 
 const associate = (req, res) => {
-  const author = req.params.author;
-  const book = req.params.book;
+  const author = req.params.author || req.body.author;
+  const book = req.params.book || req.body.book;
   AuthorBook.find({
     author: author,
     book: book
@@ -46,8 +46,8 @@ const associate = (req, res) => {
 };
 
 const unlink = (req, res) => {
-  const author = req.params.author;
-  const book = req.params.book;
+  const author = req.params.author || req.body.author;
+  const book = req.params.book || req.body.book;
   AuthorBook.findOneAndDelete({
     author: author,
     book: book

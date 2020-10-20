@@ -44,17 +44,25 @@ Las rutas para obtener los autores:
 
   - `{{author}}`: ID del autor
 
-- Relacionar un libro con el autor: `POST {{apiUrl}}/api/authors/{{author}}/books/{{book}}`
+- Relacionar un libro con el autor: `POST {{apiUrl}}/api/authors/{{author}}/books`
 
   - `{{author}}`: ID del autor
 
-  - `{{book}}`: ID del libro
+```json
+{
+  "book": "ID del Libro",
+}
+```
 
-- Quitar relación de libro con el autor: `DELETE {{apiUrl}}/api/authors/{{author}}/books/{{book}}`
+- Quitar relación de libro con el autor: `DELETE {{apiUrl}}/api/authors/{{author}}/books`
 
   - `{{author}}`: ID del autor
 
-  - `{{book}}`: ID del libro
+```json
+{
+  "book": "ID del Libro",
+}
+```
 
 ## Libros
 
@@ -94,14 +102,22 @@ Las rutas para obtener los libros:
 
   - `{{book}}`: ID del libro
 
-- Relacionar un autor con el libro: `POST {{apiUrl}}/api/books/{{book}}/authors/{{author}}`
-
-  - `{{author}}`: ID del autor
+- Relacionar un autor con el libro: `POST {{apiUrl}}/api/books/{{book}}/authors`
 
   - `{{book}}`: ID del libro
 
-- Quitar relación de autor con el libro: `DELETE {{apiUrl}}/api/books/{{book}}/authors/{{author}}`
+```json
+{
+  "author": "ID del Autor",
+}
+```
 
-  - `{{author}}`: ID del autor
+- Quitar relación de autor con el libro: `DELETE {{apiUrl}}/api/books/{{book}}/authors`
 
   - `{{book}}`: ID del libro
+
+```json
+{
+  "author": "ID del Autor",
+}
+```
