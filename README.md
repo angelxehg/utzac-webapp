@@ -18,6 +18,6 @@ Use estos comandos para desplegar en Heroku. Requiere una base de datos en Mongo
 
 - Crear aplicación: `heroku create`
 
-- Configura la base de datos: `heroku config:set MONGODB_URI=[Tu_URI]`
+- Configura la base de datos: `heroku config:set DATABASE_URL="[URL de la base de datos]"`
 
 - Subir cambios a Heroku: `git push heroku main`
