@@ -34,7 +34,33 @@ const register = (req, res) => {
   })
 };
 
+const login = (req, res) => {
+  const params = req.body;
+  if (params.email == '' || params.email == null) {
+    return res.status(400).send(message.missing('email'));
+  }
+  if (params.password == '' || params.password == null) {
+    return res.status(400).send(message.missing('password'));
+  }
+  const email = params.email;
+  const password = params.password;
+  User.findOne({ email: email }).then(user => {
+    if (!user) {
+      return res.status(404).send(message.error('Can\'t get user'));
+    }
+    bcrypt.compare(password, user.password, (err, login) => {
+      if (err || !login) {
+        return res.status(403).send(message.error('Wrong password'));
+      }
+      return res.send({ message: 'OK' });
+    })
+  }).catch((err) => {
+    return res.status(403).send(message.error('Can\'t get user', err));
+  })
+}
+
 module.exports = {
-  register
+  register,
+  login
 };
 

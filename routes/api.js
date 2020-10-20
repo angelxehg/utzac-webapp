@@ -9,6 +9,7 @@ const books = require('../controllers/book');
 const authorBooks = require('../controllers/author-book');
 
 router.post('/auth/register', users.register);
+router.post('/auth/login', users.login);
 
 router.route('/authors')
   .get(authors.index)
