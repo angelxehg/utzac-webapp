@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt-nodejs');
 
 const User = require('../models/user');
 const message = require('../models/message');
+const jwt = require('../services/jwt');
 
 const register = (req, res) => {
   var user = new User();
@@ -52,7 +53,8 @@ const login = (req, res) => {
       if (err || !login) {
         return res.status(403).send(message.error('Wrong password'));
       }
-      return res.send({ message: 'OK' });
+
+      return res.send({ token: jwt.create(user) });
     })
   }).catch((err) => {
     return res.status(403).send(message.error('Can\'t get user', err));
