@@ -13,6 +13,13 @@ const auth = require('../middleware/auth');
 router.post('/auth/register', users.register);
 router.post('/auth/login', users.login);
 
+router.get('/auth/users', auth.logged, users.index);
+
+router.route('/auth/users/:user')
+  .get(auth.logged, users.show)
+  .put(auth.logged, auth.admin, users.update)
+  .delete(auth.logged, auth.admin, users.destroy);
+
 router.route('/authors')
   .get(auth.logged, authors.index)
   .post(auth.logged, auth.admin, authors.store);

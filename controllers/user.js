@@ -61,8 +61,71 @@ const login = (req, res) => {
   })
 }
 
+const index = (req, res) => {
+  User.find().then((users) => {
+    return res.send(users);
+  }).catch((err) => {
+    return res.status(400).send(message.error('Can\'t get users', err));
+  })
+}
+
+const show = (req, res) => {
+  const id = req.params.user;
+  User.findById(id).then((user) => {
+    if (!user) {
+      return res.status(400).send(message.error('Can\'t get user', err));
+    }
+    return res.send(user);
+  }).catch((err) => {
+    return res.status(400).send(message.error('Can\'t get user', err));
+  })
+}
+
+const update = (req, res) => {
+  const id = req.params.user;
+  const params = req.body;
+  if (params.name == '' || params.name == null) {
+    return res.status(400).send(message.missing('name'));
+  }
+  if (params.email == '' || params.email == null) {
+    return res.status(400).send(message.missing('email'));
+  }
+  User.findById(id).then((user) => {
+    user.name = params.name;
+    user.email = params.email;
+    if (params.password) {
+      bcrypt.hash(params.password, null, null, function (err, hash) {
+        if (err) {
+          return res.status(400).send(message.error(err));
+        }
+        user.password = hash;
+      });
+    }
+    user.save().then((user) => {
+      return res.send(user);
+    }).catch((err) => {
+      return res.status(400).send(message.error('Can\'t update user', err));
+    });
+  }).catch((err) => {
+    return res.status(400).send(message.error('Can\'t get user', err));
+  });
+}
+
+const destroy = (req, res) => {
+  const id = req.params.user;
+  User.findByIdAndDelete(id).then(() => {
+    return res.status(204).send();
+  }).catch((err) => {
+    return res.status(400).send(message.error('Can\'t delete user', err));
+  });
+}
+
 module.exports = {
   register,
-  login
+  login,
+  index,
+  show,
+  update,
+  destroy
 };
 
