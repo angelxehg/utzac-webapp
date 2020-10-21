@@ -8,11 +8,13 @@ const authors = require('../controllers/author');
 const books = require('../controllers/book');
 const authorBooks = require('../controllers/author-book');
 
+const auth = require('../middleware/auth');
+
 router.post('/auth/register', users.register);
 router.post('/auth/login', users.login);
 
 router.route('/authors')
-  .get(authors.index)
+  .get(auth.loggedIn, authors.index)
   .post(authors.store);
 
 router.route('/authors/:author')
