@@ -7,6 +7,7 @@ const app = express();
 
 const port = process.env.PORT || 8000;
 const database = process.env.DATABASE_URL || 'mongodb://localhost:27017/utzac-webapp';
+const error = require('./helpers/error-handler');
 
 const api = require('./routes/api');
 const web = require('./routes/web');
@@ -16,6 +17,8 @@ app.use(bodyParser.json());
 
 app.use('/', web);
 app.use('/api', api);
+
+app.use(error.handle);
 
 mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
   if (err) {

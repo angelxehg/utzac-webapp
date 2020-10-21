@@ -1,11 +1,8 @@
 {
-  "name": "proyecto",
-  "version": "0.2.0",
-  "description": "Aplicación",
-  "main": "app.js",
-  "scripts": {
-    "start": "nodemon app.js"
-  },
+  "name": "utzac-webapp",
+  "version": "0.2.1",
+  "description": "Autores y Libros: Aplicación Web con Express y MongoDB",
+  "license": "MIT",
   "author": {
     "name": "Angel Hurtado",
     "email": "contact@angelxehg.com",
@@ -15,7 +12,10 @@
     "type": "git",
     "url": "https://github.com/angelxehg/utzac-webapp"
   },
-  "license": "MIT",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.19.0",

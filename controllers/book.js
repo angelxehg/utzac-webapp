@@ -1,67 +1,58 @@
 'use strict';
 
 const Book = require('../models/book');
-const message = require('../models/message');
+const error = require('../helpers/error-handler');
 
-const index = (req, res) => {
-  Book.find().then((books) => {
-    return res.send(books);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get books', err));
-  })
+const index = (req, res, next) => {
+  return Book.find()
+    .then(books => res.send(books))
+    .catch(err => next(error.mongodb(err)));
 }
 
-const store = (req, res) => {
+const store = (req, res, next) => {
   const params = req.body;
   if (params.title == '' || params.title == null) {
-    return res.status(400).send(message.missing('title'));
+    throw error.badRequest('Missing parameter title');
   }
   var book = new Book();
   book.title = params.title;
-  book.save().then((book) => {
-    return res.status(201).send(book);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t save book', err));
-  })
+  return book.save()
+    .then(book => res.status(201).send(book))
+    .catch(err => next(error.mongodb(err)));
 }
 
-const show = (req, res) => {
+const show = (req, res, next) => {
   const id = req.params.book;
-  Book.findById(id).then((book) => {
+  return Book.findById(id).then((book) => {
     if (!book) {
-      return res.status(400).send(message.error('Can\'t get book', err));
+      throw error.notFound('No book found');
     }
     return res.send(book);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get book', err));
-  })
+  }).catch(err => next(error.mongodb(err)));
 }
 
-const update = (req, res) => {
+const update = (req, res, next) => {
   const id = req.params.book;
   const params = req.body;
   if (params.title == '' || params.title == null) {
-    return res.status(400).send(message.missing('title'));
+    throw error.badRequest('Missing parameter title');
   }
-  Book.findById(id).then((book) => {
+  return Book.findById(id).then((book) => {
+    if (!book) {
+      throw error.notFound('No book found');
+    }
     book.title = params.title;
-    book.save().then((book) => {
-      return res.send(book);
-    }).catch((err) => {
-      return res.status(400).send(message.error('Can\'t update book', err));
-    });
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get book', err));
-  });
+    book.save()
+      .then(book => res.send(book))
+      .catch(err => next(error.mongodb(err)));
+  }).catch(err => next(error.mongodb(err)));
 }
 
-const destroy = (req, res) => {
+const destroy = (req, res, next) => {
   const id = req.params.book;
-  Book.findByIdAndDelete(id).then(() => {
-    return res.status(204).send();
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t delete book', err));
-  });
+  return Book.findByIdAndDelete(id)
+    .then(() => res.status(204).send())
+    .catch(err => next(error.mongodb(err)));
 }
 
 module.exports = {

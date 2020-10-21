@@ -17,6 +17,16 @@ const create = (user) => {
   return jwt.encode(payload, secret);
 }
 
+const decode = (token) => {
+  const payload = jwt.decode(token, secret);
+  const current = moment().unix();
+  if (payload.exp <= current) {
+    throw error.unauthorized('Token expired');
+  }
+  return payload;
+}
+
 module.exports = {
-  create
+  create,
+  decode
 }

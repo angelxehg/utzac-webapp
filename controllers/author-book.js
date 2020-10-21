@@ -1,61 +1,48 @@
 'use strict';
 
 const AuthorBook = require('../models/author-book');
-const message = require('../models/message');
+const error = require('../helpers/error-handler');
 
-const indexBooks = (req, res) => {
+const indexBooks = (req, res, next) => {
   const author = req.params.author;
-  AuthorBook.find({ author: author }).populate('book').then((books) => {
-    return res.send(books);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get books', err));
-  });
+  return AuthorBook.find({ author: author }).populate('book')
+    .then(books => res.send(books))
+    .catch(err => next(error.mongodb(err)));
 };
 
-const indexAuthors = (req, res) => {
+const indexAuthors = (req, res, next) => {
   const book = req.params.book;
-  AuthorBook.find({ book: book }).populate('author').then((authors) => {
-    return res.send(authors);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get authors', err));
-  });
+  return AuthorBook.find({ book: book }).populate('author')
+    .then(authors => res.send(authors))
+    .catch(err => next(error.mongodb(err)));
 };
 
-const associate = (req, res) => {
+const associate = (req, res, next) => {
   const author = req.params.author || req.body.author;
   const book = req.params.book || req.body.book;
-  AuthorBook.find({
-    author: author,
-    book: book
-  }).then(results => {
+  if (!author || !book) {
+    throw error.badRequest('Missing book or author');
+  }
+  return AuthorBook.find({ author: author, book: book }).then(results => {
     if (results.length > 0) {
-      return res.status(400).send(message.error('Relation already exists'));
+      throw error.badRequest('Relation already exists');
     }
-    var authorship = new AuthorBook({
-      author: author,
-      book: book
-    });
-    authorship.save().then((authorship) => {
-      return res.status(201).send(authorship);
-    }).catch((err) => {
-      return res.status(400).send(message.error('Can\'t save book', err));
-    });
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t save book', err));
-  });
+    var authorship = new AuthorBook({ author, book });
+    authorship.save()
+      .then(authorship => res.status(201).send(authorship))
+      .catch(err => next(error.mongodb(err)));
+  }).catch(err => next(error.mongodb(err)));
 };
 
-const unlink = (req, res) => {
+const unlink = (req, res, next) => {
   const author = req.params.author || req.body.author;
   const book = req.params.book || req.body.book;
-  AuthorBook.findOneAndDelete({
-    author: author,
-    book: book
-  }).then(() => {
-    return res.status(204).send();
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t remove relation', err));
-  });
+  if (!author || !book) {
+    throw error.badRequest('Missing book or author');
+  }
+  return AuthorBook.findOneAndDelete({ author, book })
+    .then(() => res.status(204).send())
+    .catch(err => next(error.mongodb(err)));
 };
 
 module.exports = {

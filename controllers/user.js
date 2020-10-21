@@ -3,121 +3,114 @@
 const bcrypt = require('bcrypt-nodejs');
 
 const User = require('../models/user');
-const message = require('../models/message');
 const jwt = require('../services/jwt');
+const error = require('../helpers/error-handler');
 
-const register = (req, res) => {
+const register = (req, res, next) => {
   var user = new User();
   const params = req.body;
   if (params.name == '' || params.name == null) {
-    return res.status(400).send(message.missing('name'));
+    throw error.badRequest('Missing parameter name');
   }
   if (params.email == '' || params.email == null) {
-    return res.status(400).send(message.missing('email'));
+    throw error.badRequest('Missing parameter email');
   }
   if (params.password == '' || params.password == null) {
-    return res.status(400).send(message.missing('password'));
+    throw error.badRequest('Missing parameter password');
   }
   user.name = params.name;
   user.email = params.email;
   user.role = 'ROLE_USER';
   user.image = 'null'
-  bcrypt.hash(params.password, null, null, function (err, hash) {
+  bcrypt.hash(params.password, null, null, (err, hash) => {
     if (err) {
-      return res.status(400).send(message.error(err));
+      throw error.badRequest('Couldn\'t encrypt password');
     }
     user.password = hash;
   });
-  user.save().then((user) => {
-    return res.status(201).send(user);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t save user', err));
-  })
+  return user.save()
+    .then(user => res.status(201).send(user))
+    .catch(err => next(error.mongodb(err)));
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const params = req.body;
   if (params.email == '' || params.email == null) {
-    return res.status(400).send(message.missing('email'));
+    throw error.badRequest('Missing parameter email');
   }
   if (params.password == '' || params.password == null) {
-    return res.status(400).send(message.missing('password'));
+    throw error.badRequest('Missing parameter password');
   }
   const email = params.email;
   const password = params.password;
-  User.findOne({ email: email }).then(user => {
+  return User.findOne({ email: email }).then(user => {
     if (!user) {
-      return res.status(404).send(message.error('Can\'t get user'));
+      throw error.notFound('No user found');
     }
     bcrypt.compare(password, user.password, (err, login) => {
       if (err || !login) {
-        return res.status(403).send(message.error('Wrong password'));
+        return next(error.unauthorized('Incorrect password'));
       }
-
       return res.send({ token: jwt.create(user) });
     })
-  }).catch((err) => {
-    return res.status(403).send(message.error('Can\'t get user', err));
-  })
+  }).catch(err => next(error.mongodb(err)));
 }
 
-const index = (req, res) => {
-  User.find().then((users) => {
-    return res.send(users);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get users', err));
-  })
+const index = (req, res, next) => {
+  return User.find()
+    .then(users => res.send(users))
+    .catch(err => next(error.mongodb(err)));
 }
 
-const show = (req, res) => {
+const show = (req, res, next) => {
   const id = req.params.user;
-  User.findById(id).then((user) => {
+  return User.findById(id).then(user => {
     if (!user) {
-      return res.status(400).send(message.error('Can\'t get user', err));
+      throw error.notFound('No user found');
     }
-    return res.send(user);
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get user', err));
-  })
+    res.send(user);
+  }).catch(err => next(error.mongodb(err)));
 }
 
-const update = (req, res) => {
+const update = (req, res, next) => {
   const id = req.params.user;
   const params = req.body;
   if (params.name == '' || params.name == null) {
-    return res.status(400).send(message.missing('name'));
+    throw error.badRequest('Missing parameter name');
   }
   if (params.email == '' || params.email == null) {
-    return res.status(400).send(message.missing('email'));
+    throw error.badRequest('Missing parameter email');
   }
-  User.findById(id).then((user) => {
+  return User.findById(id).then(user => {
+    if (!user) {
+      throw error.notFound('No user found');
+    }
     user.name = params.name;
     user.email = params.email;
     if (params.password) {
       bcrypt.hash(params.password, null, null, function (err, hash) {
         if (err) {
-          return res.status(400).send(message.error(err));
+          return next(error.badRequest('Couldn\'t encrypt password'));
         }
         user.password = hash;
       });
     }
-    user.save().then((user) => {
-      return res.send(user);
-    }).catch((err) => {
-      return res.status(400).send(message.error('Can\'t update user', err));
-    });
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t get user', err));
-  });
+    user.save()
+      .then(user => res.send(user))
+      .catch(err => next(error.mongodb(err)));
+  }).catch(err => next(error.mongodb(err)));
 }
 
-const destroy = (req, res) => {
+const destroy = (req, res, next) => {
   const id = req.params.user;
-  User.findByIdAndDelete(id).then(() => {
-    return res.status(204).send();
-  }).catch((err) => {
-    return res.status(400).send(message.error('Can\'t delete user', err));
-  });
+  return User.findById(id).then(user => {
+    if (!user) {
+      throw error.notFound('No user found');
+    }
+    user.remove()
+      .then(() => res.status(204).send())
+      .catch(err => next(error.mongodb(err)));
+  }).catch(err => next(error.mongodb(err)));
 }
 
 module.exports = {

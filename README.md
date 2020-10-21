@@ -1,6 +1,6 @@
-# Autores y Libros
+# UTZAC Webapp
 
-API con Express y MongoDb. Materia: Desarrollo de Aplicaciones Web
+Autores y Libros: Aplicación Web con Express y MongoDB
 
 [Documentación API](./docs/api.md)
 
