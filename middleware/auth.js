@@ -5,11 +5,11 @@ const moment = require('moment');
 const secret = process.env.SECRET || 'mi-clave-privada';
 
 const logged = (req, res, next) => {
-  if (!req.headers.authorization) {
-    return res.status(403).send({ message: 'No authorization provided' });
-  }
-  const token = req.headers.authorization.replace(/[""]+/g, '');
   try {
+    if (!req.headers.authorization) {
+      throw 'No authorization provided';
+    }
+    const token = req.headers.authorization.replace(/[""]+/g, '');
     const payload = jwt.decode(token, secret);
     const current = moment().unix();
     if (payload.exp <= current) {
