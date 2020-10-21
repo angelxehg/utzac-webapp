@@ -8,35 +8,44 @@ const authors = require('../controllers/author');
 const books = require('../controllers/book');
 const authorBooks = require('../controllers/author-book');
 
+const auth = require('../middleware/auth');
+
 router.post('/auth/register', users.register);
 router.post('/auth/login', users.login);
 
+router.get('/auth/users', auth.logged, users.index);
+
+router.route('/auth/users/:user')
+  .get(auth.logged, users.show)
+  .put(auth.logged, auth.admin, users.update)
+  .delete(auth.logged, auth.admin, users.destroy);
+
 router.route('/authors')
-  .get(authors.index)
-  .post(authors.store);
+  .get(auth.logged, authors.index)
+  .post(auth.logged, auth.admin, authors.store);
 
 router.route('/authors/:author')
-  .get(authors.show)
-  .post(authors.update)
-  .delete(authors.destroy);
+  .get(auth.logged, authors.show)
+  .put(auth.logged, auth.admin, authors.update)
+  .delete(auth.logged, auth.admin, authors.destroy);
 
 router.route('/authors/:author/books')
-  .get(authorBooks.indexBooks)
-  .post(authorBooks.associate)
-  .delete(authorBooks.unlink);
+  .get(auth.logged, authorBooks.indexBooks)
+  .post(auth.logged, auth.admin, authorBooks.associate)
+  .delete(auth.logged, auth.admin, authorBooks.unlink);
 
 router.route('/books')
-  .get(books.index)
-  .post(books.store);
+  .get(auth.logged, books.index)
+  .post(auth.logged, auth.admin, books.store);
 
 router.route('/books/:book')
-  .get(books.show)
-  .post(books.update)
-  .delete(books.destroy);
+  .get(auth.logged, books.show)
+  .put(auth.logged, auth.admin, books.update)
+  .delete(auth.logged, auth.admin, books.destroy);
 
 router.route('/books/:book/authors')
-  .get(authorBooks.indexAuthors)
-  .post(authorBooks.associate)
-  .delete(authorBooks.unlink);
+  .get(auth.logged, authorBooks.indexAuthors)
+  .post(auth.logged, auth.admin, authorBooks.associate)
+  .delete(auth.logged, auth.admin, authorBooks.unlink);
 
 module.exports = router;

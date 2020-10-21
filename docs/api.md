@@ -4,6 +4,51 @@ Estos son todos los puntos de entrada y métodos disponibles en la API.
 
 Se asume la variable `apiUrl` como `http://localhost:8000/`.
 
+## Usuarios
+
+Las rutas para gestionar usuarios:
+
+- Registro usuario: `POST {{apiUrl}}/api/auth/register`
+
+```json
+{
+  "name": "Nombre del Usuario",
+  "email": "Correo del Usuario",
+  "password": "Contraseña del Usuario"
+}
+```
+
+- Inicio de sesión: `POST {{apiUrl}}/api/auth/login`
+
+```json
+{
+  "email": "Correo del Usuario",
+  "password": "Contraseña del Usuario"
+}
+```
+
+- Listar usuarios: `GET {{apiUrl}}/api/auth/users`
+
+- Obtener un usuario: `GET {{apiUrl}}/api/auth/users/{{user}}`
+
+  - `{{user}}`: ID del usuario
+
+- Actualizar usuario: `PUT {{apiUrl}}/api/auth/users/{{user}}`
+
+  - `{{user}}`: ID del usuario
+
+```json
+{
+  "name": "Nombre del Usuario",
+  "email": "Correo del Usuario",
+  "password": "Contraseña del Usuario"
+}
+```
+
+- Eliminar un usuario: `DELETE {{apiUrl}}/api/auth/users/{{user}}`
+
+  - `{{user}}`: ID del usuario
+
 ## Autores
 
 Las rutas para obtener los autores:
