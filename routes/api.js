@@ -17,35 +17,35 @@ router.get('/auth/users', auth.logged, users.index);
 
 router.route('/auth/users/:user')
   .get(auth.logged, users.show)
-  .put(auth.logged, auth.admin, users.update)
-  .delete(auth.logged, auth.admin, users.destroy);
+  .put(auth.admin, users.update)
+  .delete(auth.admin, users.destroy);
 
 router.route('/authors')
   .get(auth.logged, authors.index)
-  .post(auth.logged, auth.admin, authors.store);
+  .post(auth.admin, authors.store);
 
 router.route('/authors/:author')
   .get(auth.logged, authors.show)
-  .put(auth.logged, auth.admin, authors.update)
-  .delete(auth.logged, auth.admin, authors.destroy);
+  .put(auth.admin, authors.update)
+  .delete(auth.admin, authors.destroy);
 
 router.route('/authors/:author/books')
   .get(auth.logged, authorBooks.indexBooks)
-  .post(auth.logged, auth.admin, authorBooks.associate)
-  .delete(auth.logged, auth.admin, authorBooks.unlink);
+  .post(auth.admin, authorBooks.associate)
+  .delete(auth.admin, authorBooks.unlink);
 
 router.route('/books')
   .get(auth.logged, books.index)
-  .post(auth.logged, auth.admin, books.store);
+  .post(auth.admin, books.store);
 
 router.route('/books/:book')
   .get(auth.logged, books.show)
-  .put(auth.logged, auth.admin, books.update)
-  .delete(auth.logged, auth.admin, books.destroy);
+  .put(auth.admin, books.update)
+  .delete(auth.admin, books.destroy);
 
 router.route('/books/:book/authors')
   .get(auth.logged, authorBooks.indexAuthors)
-  .post(auth.logged, auth.admin, authorBooks.associate)
-  .delete(auth.logged, auth.admin, authorBooks.unlink);
+  .post(auth.admin, authorBooks.associate)
+  .delete(auth.admin, authorBooks.unlink);
 
 module.exports = router;

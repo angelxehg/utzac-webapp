@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const handle = (err, req, res, next) => {
   if (err) {
+    console.log(err);
     const code = err.code || 503;
     const message = err.message || 'Service unavailable';
     return res.status(code).send({ message: message });
