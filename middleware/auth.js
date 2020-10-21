@@ -4,7 +4,7 @@ const jwt = require('jwt-simple');
 const moment = require('moment');
 const secret = process.env.SECRET || 'mi-clave-privada';
 
-const loggedIn = (req, res, next) => {
+const logged = (req, res, next) => {
   if (!req.headers.authorization) {
     return res.status(403).send({ message: 'No authorization provided' });
   }
@@ -18,10 +18,25 @@ const loggedIn = (req, res, next) => {
     req.user = payload;
     next();
   } catch (error) {
-    return res.status(403).send({ message: error.message });
+    return res.status(403).send({ message: error });
+  }
+}
+
+const admin = (req, res, next) => {
+  try {
+    if (!req.user) {
+      throw 'Not logged as admin';
+    }
+    if (req.user.role !== 'ROLE_ADMIN') {
+      throw 'Not logged as admin';
+    }
+    next();
+  } catch (error) {
+    return res.status(403).send({ message: error });
   }
 }
 
 module.exports = {
-  loggedIn
+  logged,
+  admin
 }

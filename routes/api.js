@@ -14,8 +14,8 @@ router.post('/auth/register', users.register);
 router.post('/auth/login', users.login);
 
 router.route('/authors')
-  .get(auth.loggedIn, authors.index)
-  .post(authors.store);
+  .get(auth.logged, authors.index)
+  .post(auth.logged, auth.admin, authors.store);
 
 router.route('/authors/:author')
   .get(authors.show)
