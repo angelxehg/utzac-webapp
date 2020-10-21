@@ -45,7 +45,7 @@ const login = (req, res, next) => {
   const password = params.password;
   return User.findOne({ email: email }).then(user => {
     if (!user) {
-      return next(error.notFound('No user with the given email'));
+      throw error.notFound('No user found');
     }
     bcrypt.compare(password, user.password, (err, login) => {
       if (err || !login) {
@@ -66,7 +66,7 @@ const show = (req, res, next) => {
   const id = req.params.user;
   return User.findById(id).then(user => {
     if (!user) {
-      return next(error.notFound('No user found'));
+      throw error.notFound('No user found');
     }
     res.send(user);
   }).catch(err => next(error.mongodb(err)));
@@ -83,14 +83,14 @@ const update = (req, res, next) => {
   }
   return User.findById(id).then(user => {
     if (!user) {
-      return next(error.notFound('No user found'));
+      throw error.notFound('No user found');
     }
     user.name = params.name;
     user.email = params.email;
     if (params.password) {
       bcrypt.hash(params.password, null, null, function (err, hash) {
         if (err) {
-          throw error.badRequest('Couldn\'t encrypt password');
+          return next(error.badRequest('Couldn\'t encrypt password'));
         }
         user.password = hash;
       });
@@ -105,7 +105,7 @@ const destroy = (req, res, next) => {
   const id = req.params.user;
   return User.findById(id).then(user => {
     if (!user) {
-      return next(error.notFound('No user found'));
+      throw error.notFound('No user found');
     }
     user.remove()
       .then(() => res.status(204).send())

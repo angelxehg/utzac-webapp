@@ -22,6 +22,9 @@ const notFound = (message) => error(404, message);
 
 const mongodb = (err) => {
   console.error(err);
+  if (err.code) {
+    return err;
+  }
   if (err instanceof mongoose.Error.CastError) {
     return error(404, 'Couldn\'t find document');
   }
