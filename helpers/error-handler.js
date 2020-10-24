@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const handle = (err, req, res, next) => {
   if (err) {
-    console.log(err);
+    console.trace(err);
     const code = err.code || 503;
     const message = err.message || 'Service unavailable';
     return res.status(code).send({ message: message });
@@ -21,18 +21,27 @@ const unauthorized = (message) => error(401, message);
 
 const notFound = (message) => error(404, message);
 
-const mongodb = (err) => {
-  console.error(err);
-  if (err.code) {
-    return err;
+const mongoError = (err) => {
+  if (err.code === 11000) {
+    return badRequest(err.message);
   }
+  return error(500, 'Server error');
+}
+
+const mongodb = (err) => {
   if (err instanceof mongoose.Error.CastError) {
     return error(404, 'Couldn\'t find document');
   }
   if (err instanceof mongoose.Error.DocumentNotFoundError) {
     return error(404, 'Couldn\'t find document');
   }
-  return error(503, 'Service unavailable');
+  if (err.name === 'MongoError') {
+    return mongoError(err);
+  }
+  if (err.code) {
+    return err;
+  }
+  return error(500, 'Server error');
 }
 
 module.exports = {
