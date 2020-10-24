@@ -20,7 +20,7 @@ app.use('/api', api);
 
 app.use(error.handle);
 
-mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
+mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }, (err, db) => {
   if (err) {
     throw err;
   } else {
