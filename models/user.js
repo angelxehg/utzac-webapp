@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const schema = Schema({
   name: String,
-  email: { type: String, unique: true, index: true, requited: true },
+  email: { type: String, unique: true, index: true, required: true },
   password: String,
   role: String,
   image: String
