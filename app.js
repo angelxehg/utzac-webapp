@@ -15,7 +15,7 @@ const web = require('./routes/web');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/', web);
+app.use('/', express.static('web'));
 app.use('/api', api);
 
 app.use(error.handle);
