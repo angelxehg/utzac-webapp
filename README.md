@@ -1,16 +1,32 @@
 # UTZAC Webapp
 
-Autores y Libros: Aplicación Web con Express y MongoDB
+Autores y Libros: Aplicación Web con Express, Angular y MongoDB
 
 [Documentación API](./docs/api.md)
 
 ## Instalación
 
-Use estos comandos para instalar de manera local.
+Use estos comandos para instalar la aplicación:
 
-- Instalar dependencias: `npm install`
+- Instalar Angular CLI: `npm install -g @angular/cli`
 
-- Iniciar servidor: `npm run start`
+- Clonar el repositorio: `git clone https://github.com/angelxehg/utzac-webapp.git`
+
+- Instalar dependencias: `cd utzac-webapp` & `npm install`
+
+- Iniciar servidor express: `npm run start`
+
+- Iniciar aplicación Angular: `ng serve --open`. Requiere Angular CLI.
+
+## Tests y calidad
+
+Use estos comandos para ejecutar tests y verificar calidad del código:
+
+- Code linting: `ng lint`
+
+- Unit testing: `ng test`
+
+- E2E testing: `ng e2e`
 
 ## Despliegue en heroku
 
