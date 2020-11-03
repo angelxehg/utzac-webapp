@@ -7,9 +7,9 @@ const app = express();
 
 const port = process.env.PORT || 8000;
 const database = process.env.DATABASE_URL || 'mongodb://localhost:27017/utzac-webapp';
-const error = require('./helpers/error-handler');
+const error = require('./backend/helpers/error-handler');
 
-const api = require('./routes/api');
+const api = require('./backend/routes/api');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
