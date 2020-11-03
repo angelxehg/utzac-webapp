@@ -10,12 +10,10 @@ const database = process.env.DATABASE_URL || 'mongodb://localhost:27017/utzac-we
 const error = require('./helpers/error-handler');
 
 const api = require('./routes/api');
-const web = require('./routes/web');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/', express.static('web'));
 app.use('/api', api);
 
 app.use(error.handle);
