@@ -12,9 +12,9 @@
     "type": "git",
     "url": "https://github.com/angelxehg/utzac-webapp"
   },
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
