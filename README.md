@@ -1,6 +1,6 @@
 # UTZAC Webapp
 
-Autores y Libros: Aplicación Web con Express y MongoDB
+Autores y Libros: Aplicación Web con Express, Angular y MongoDB
 
 [Documentación API](./docs/api.md)
 
@@ -10,7 +10,9 @@ Use estos comandos para instalar de manera local.
 
 - Instalar dependencias: `npm install`
 
-- Iniciar servidor: `npm run start`
+- Iniciar servidor express: `npm run start`
+
+- Iniciar aplicación Angular: `ng serve --open`. Requiere Angular CLI.
 
 ## Despliegue en heroku
 
