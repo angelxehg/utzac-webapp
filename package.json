@@ -1,6 +1,6 @@
 {
   "name": "utzac-webapp",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Autores y Libros: Aplicación Web con Express y MongoDB",
   "license": "MIT",
   "author": {
