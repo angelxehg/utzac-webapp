@@ -5,11 +5,6 @@ import { PanelComponent } from './panel.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'books',
-    pathMatch: 'prefix'
-  },
-  {
-    path: '',
     component: PanelComponent,
     children: [
       {
@@ -25,6 +20,11 @@ const routes: Routes = [
         loadChildren: () => import('../users/users.module').then(m => m.UsersModule)
       }
     ]
+  },
+  {
+    path: '',
+    redirectTo: '/app/books',
+    pathMatch: 'full'
   },
 ];
 
