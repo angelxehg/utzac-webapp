@@ -8,6 +8,13 @@ export const AuthServiceMock = {
   logout: () => { }
 };
 
+export interface Credential {
+  name?: string;
+  email: string;
+  password: string;
+  passwordConfirmation?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,11 +38,29 @@ export class AuthService {
     return this.currentUser;
   }
 
-  public login(): void {
+  public login(credential: Credential): void {
     this.currentUser = {
       _id: 'x',
       name: 'Angel Hurtado',
-      email: 'contact@angelxehg.com',
+      email: credential.email,
+      role: 'admin',
+      image: 'https://github.com/angelxehg.png?size=150'
+    };
+    localStorage.setItem('USER_DATA', JSON.stringify(this.currentUser));
+    this.router.navigateByUrl('/app');
+  }
+
+  public register(credential: Credential): void {
+    if (credential.password === '') {
+      return;
+    }
+    if (credential.password !== credential.passwordConfirmation) {
+      return;
+    }
+    this.currentUser = {
+      _id: 'x',
+      name: credential.name,
+      email: credential.email,
       role: 'admin',
       image: 'https://github.com/angelxehg.png?size=150'
     };

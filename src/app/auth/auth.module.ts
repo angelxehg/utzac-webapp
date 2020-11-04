@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LayoutsModule } from '../layouts/layouts.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { LayoutsModule } from '../layouts/layouts.module';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     LayoutsModule,
     AuthRoutingModule
   ]
