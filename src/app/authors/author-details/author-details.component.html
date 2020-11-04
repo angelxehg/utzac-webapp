@@ -1,7 +1,7 @@
-<div class="card">
+<div class="card" *ngIf="author">
   <div class="card-body">
     <h5 class="card-title">Datos del autor</h5>
-    <p class="card-text">Nombre: Angel Hurtado</p>
-    <p class="card-text">País: México</p>
+    <p class="card-text">Nombre: {{ author.name }}</p>
+    <p class="card-text">País: {{ author.country }}</p>
   </div>
 </div>

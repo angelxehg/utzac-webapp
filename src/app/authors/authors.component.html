@@ -6,14 +6,9 @@
       </div>
     </div>
     <ul class="list-group">
-      <a class="list-group-item list-group-item-action" routerLink="1" routerLinkActive="active">
-        Cras justo odio
-      </a>
-      <a class="list-group-item list-group-item-action" routerLink="2" routerLinkActive="active">
-        Dapibus ac facilisis in
-      </a>
-      <a class="list-group-item list-group-item-action" routerLink="3" routerLinkActive="active">
-        Morbi leo risus
+      <a *ngFor="let item of items | async" class="list-group-item list-group-item-action" [routerLink]="item._id"
+        routerLinkActive="active">
+        {{ item.name }}
       </a>
     </ul>
   </div>
