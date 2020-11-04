@@ -79,6 +79,10 @@ export class BooksService {
     ).toPromise();
   }
 
+  public linkAuthor(book: string, author: string): Promise<any> {
+    return this.http.post(`${this.api}/books/${book}/authors`, { author }).toPromise();
+  }
+
   public removeAuthor(book: string, author: string): Promise<boolean> {
     return this.http.delete(`${this.api}/books/${book}/authors/${author}`).pipe(
       map(r => true)

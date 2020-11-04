@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { faEdit, faSave, faTimes, faTrash, faSync, faLink, faUnlink } from '@fortawesome/free-solid-svg-icons';
 import { Book, BooksService } from '../books.service';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Author } from 'src/app/authors/authors.service';
+import { Author, AuthorsService } from 'src/app/authors/authors.service';
 
 interface ProcessStatus {
   status: string;
@@ -31,6 +31,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   bookId: string;
   book: Book;
   authors: Author[];
+  availableAuthors: Author[];
 
   editMode = false;
   newMode = false;
@@ -40,6 +41,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private service: BooksService,
+    private authorsService: AuthorsService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -48,7 +50,13 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
 
   sync(): void {
     this.service.find(this.bookId).then(book => this.book = book);
-    this.service.indexAuthors(this.bookId).then(authors => this.authors = authors);
+    this.service.indexAuthors(this.bookId).then(authors => {
+      this.authors = authors;
+      const allIds = authors.map(i => i._id);
+      this.authorsService.index().then(availableAuthors => {
+        this.availableAuthors = availableAuthors.filter(i => !allIds.includes(i._id));
+      });
+    });
   }
 
   statusText(): string {
@@ -98,6 +106,14 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   delete(): void {
     this.service.delete(this.book).then(() => {
       this.service.index().then(i => this.router.navigateByUrl('/app/books'));
+    }).catch(err => {
+      this.statusMsg = { status: 'danger', message: err.error.message };
+    });
+  }
+
+  linkAuthor(author: string): void {
+    this.service.linkAuthor(this.bookId, author).then(() => {
+      this.sync();
     }).catch(err => {
       this.statusMsg = { status: 'danger', message: err.error.message };
     });

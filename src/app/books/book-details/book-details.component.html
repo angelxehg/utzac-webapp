@@ -43,9 +43,17 @@
           <button *ngIf="!editMode" type="button" class="btn btn-sm btn-primary" (click)="sync()">
             <fa-icon [icon]="faSync"></fa-icon>
           </button>
-          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-success">
-            <fa-icon [icon]="faLink"></fa-icon>
-          </button>
+          <div class="dropdown">
+            <button class="ml-2 btn btn-sm btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
+              data-toggle="dropdown" aria-expanded="false">
+              <fa-icon [icon]="faLink"></fa-icon>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+              <li *ngFor="let author of availableAuthors">
+                <button class="dropdown-item" (click)="linkAuthor(author._id)">{{ author.name }}</button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

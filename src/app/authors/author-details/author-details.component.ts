@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { faEdit, faSave, faTimes, faTrash, faSync, faLink, faUnlink } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Author, AuthorsService } from '../authors.service';
-import { Book } from 'src/app/books/books.service';
+import { Book, BooksService } from 'src/app/books/books.service';
 
 interface ProcessStatus {
   status: string;
@@ -31,6 +31,7 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
   authorID: string;
   author: Author;
   books: Book[];
+  availableBooks: Book[];
 
   editMode = false;
   newMode = false;
@@ -40,6 +41,7 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private service: AuthorsService,
+    private booksService: BooksService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -48,7 +50,13 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
 
   sync(): void {
     this.service.find(this.authorID).then(author => this.author = author);
-    this.service.indexBooks(this.authorID).then(books => this.books = books);
+    this.service.indexBooks(this.authorID).then(books => {
+      this.books = books;
+      const allIds = books.map(i => i._id);
+      this.booksService.index().then(availableBooks => {
+        this.availableBooks = availableBooks.filter(i => !allIds.includes(i._id));
+      });
+    });
   }
 
   statusText(): string {
@@ -100,6 +108,14 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
   delete(): void {
     this.service.delete(this.author).then(() => {
       this.service.index().then(i => this.router.navigateByUrl('/app/authors'));
+    }).catch(err => {
+      this.statusMsg = { status: 'danger', message: err.error.message };
+    });
+  }
+
+  linkBook(book: string): void {
+    this.service.linkBook(this.authorID, book).then(() => {
+      this.sync();
     }).catch(err => {
       this.statusMsg = { status: 'danger', message: err.error.message };
     });
