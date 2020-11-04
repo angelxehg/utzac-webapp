@@ -1,6 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { User } from '../users/users.service';
+
+const jwt = new JwtHelperService();
 
 export const AuthServiceMock = {
   user: () => null,
@@ -15,19 +21,23 @@ export interface Credential {
   passwordConfirmation?: string;
 }
 
+interface TokenResponse {
+  token: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private api = environment.apiUrl;
+
   private currentUser: User;
 
-  constructor(private router: Router) {
-    try {
-      const user: User = JSON.parse(localStorage.getItem('USER_DATA'));
-      this.currentUser = user;
-    } catch (error) {
-      this.currentUser = null;
+  constructor(private http: HttpClient, private router: Router) {
+    const token = localStorage.getItem('JWT_TOKEN');
+    if (token) {
+      this.currentUser = this.solveToken(token);
     }
   }
 
@@ -38,39 +48,40 @@ export class AuthService {
     return this.currentUser;
   }
 
-  public login(credential: Credential): void {
-    this.currentUser = {
-      _id: 'x',
-      name: 'Angel Hurtado',
-      email: credential.email,
-      role: 'admin',
-      image: 'https://github.com/angelxehg.png?size=150'
+  private solveToken(token: string): User {
+    const decoded = jwt.decodeToken(token);
+    return {
+      _id: decoded.user,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role,
+      image: decoded.image
     };
-    localStorage.setItem('USER_DATA', JSON.stringify(this.currentUser));
-    this.router.navigateByUrl('/app');
   }
 
-  public register(credential: Credential): void {
+  public login(credential: Credential): Promise<User> {
+    return this.http.post<TokenResponse>(`${this.api}/auth/login`, credential).pipe(
+      map(response => {
+        this.currentUser = this.solveToken(response.token);
+        localStorage.setItem('JWT_TOKEN', response.token);
+        return this.currentUser;
+      })
+    ).toPromise();
+  }
+
+  public register(credential: Credential): Promise<User> {
     if (credential.password === '') {
-      return;
+      throw { error: { message: 'No ingresó una contraseña' } };
     }
     if (credential.password !== credential.passwordConfirmation) {
-      return;
+      throw { error: { message: 'Las contraseñas no coinciden' } };
     }
-    this.currentUser = {
-      _id: 'x',
-      name: credential.name,
-      email: credential.email,
-      role: 'admin',
-      image: 'https://github.com/angelxehg.png?size=150'
-    };
-    localStorage.setItem('USER_DATA', JSON.stringify(this.currentUser));
-    this.router.navigateByUrl('/app');
+    return this.http.post<User>(`${this.api}/auth/register`, credential).toPromise();
   }
 
   public logout(): void {
     this.currentUser = null;
-    localStorage.removeItem('USER_DATA');
+    localStorage.removeItem('JWT_TOKEN');
     this.router.navigateByUrl('/auth');
   }
 }

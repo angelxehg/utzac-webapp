@@ -1,19 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AuthService, AuthServiceMock } from '../auth.service';
+import { AuthService, AuthServiceMock } from 'src/app/auth/auth.service';
 
-import { LoginComponent } from './login.component';
+import { CurrentUserComponent } from './current-user.component';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+describe('CurrentUserComponent', () => {
+  let component: CurrentUserComponent;
+  let fixture: ComponentFixture<CurrentUserComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoginComponent],
-      imports: [
-        RouterTestingModule
-      ],
+      declarations: [CurrentUserComponent],
       providers: [
         { provide: AuthService, useValue: AuthServiceMock }
       ]
@@ -22,7 +18,7 @@ describe('LoginComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(CurrentUserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

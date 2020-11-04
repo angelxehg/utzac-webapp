@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-panel',
@@ -8,11 +7,9 @@ import { AuthService } from '../auth/auth.service';
 })
 export class PanelComponent implements OnInit {
 
-  constructor(private auth: AuthService) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
-
-  logout = () => this.auth.logout();
 
 }

@@ -9,10 +9,7 @@ describe('PanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PanelComponent],
-      providers: [
-        { provide: AuthService, useValue: AuthServiceMock }
-      ]
+      declarations: [PanelComponent]
     })
       .compileComponents();
   });
