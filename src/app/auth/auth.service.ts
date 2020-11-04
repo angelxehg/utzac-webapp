@@ -33,11 +33,12 @@ export class AuthService {
   private api = environment.apiUrl;
 
   private currentUser: User;
+  private currentToken: string;
 
   constructor(private http: HttpClient, private router: Router) {
-    const token = localStorage.getItem('JWT_TOKEN');
-    if (token) {
-      this.currentUser = this.solveToken(token);
+    this.currentToken = localStorage.getItem('JWT_TOKEN');
+    if (this.currentToken) {
+      this.currentUser = this.solveToken(this.currentToken);
     }
   }
 
@@ -47,6 +48,8 @@ export class AuthService {
     }
     return this.currentUser;
   }
+
+  public token = () => this.currentToken;
 
   private solveToken(token: string): User {
     const decoded = jwt.decodeToken(token);
@@ -62,6 +65,7 @@ export class AuthService {
   public login(credential: Credential): Promise<User> {
     return this.http.post<TokenResponse>(`${this.api}/auth/login`, credential).pipe(
       map(response => {
+        this.currentToken = response.token;
         this.currentUser = this.solveToken(response.token);
         localStorage.setItem('JWT_TOKEN', response.token);
         return this.currentUser;
@@ -80,6 +84,7 @@ export class AuthService {
   }
 
   public logout(): void {
+    this.currentToken = null;
     this.currentUser = null;
     localStorage.removeItem('JWT_TOKEN');
     this.router.navigateByUrl('/auth');
