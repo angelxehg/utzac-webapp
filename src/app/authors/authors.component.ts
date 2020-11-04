@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { faSync, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '../auth/auth.service';
 import { AuthorsService } from './authors.service';
 
 @Component({
@@ -8,11 +10,19 @@ import { AuthorsService } from './authors.service';
 })
 export class AuthorsComponent implements OnInit {
 
+  faSync = faSync;
+  faPlus = faPlus;
+
   public items = this.service.items$;
 
-  constructor(private service: AuthorsService) { }
+  constructor(private auth: AuthService, private service: AuthorsService) { }
+
+  admin = () => this.auth.admin();
 
   ngOnInit(): void {
+    this.service.index().then();
   }
+
+  index = () => this.service.index();
 
 }
