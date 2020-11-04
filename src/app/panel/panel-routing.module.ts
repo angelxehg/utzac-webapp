@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CurrentUserComponent } from './current-user/current-user.component';
 import { PanelComponent } from './panel.component';
 
 const routes: Routes = [
@@ -18,6 +19,10 @@ const routes: Routes = [
       {
         path: 'users',
         loadChildren: () => import('../users/users.module').then(m => m.UsersModule)
+      },
+      {
+        path: 'me',
+        component: CurrentUserComponent
       }
     ]
   },
