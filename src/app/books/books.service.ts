@@ -47,13 +47,7 @@ export class BooksService {
   }
 
   public find(id: string): Promise<Book> {
-    return this.items$.pipe(
-      take(1),
-      map(all => {
-        const item = all.find(e => e._id === id);
-        return item;
-      })
-    ).toPromise();
+    return this.http.get<Book>(`${this.api}/books/${id}`).toPromise();
   }
 
   public update(book: Book): Promise<Book> {
