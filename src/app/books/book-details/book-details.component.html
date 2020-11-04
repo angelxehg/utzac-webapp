@@ -6,7 +6,10 @@
       </div>
       <div class="col-auto" *ngIf="admin()">
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-primary" (click)="editMode = true">
+          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-primary" (click)="sync()">
+            <fa-icon [icon]="faSync"></fa-icon>
+          </button>
+          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-secondary" (click)="editMode = true">
             <fa-icon [icon]="faEdit"></fa-icon>
           </button>
           <button *ngIf="editMode" type="button" class="btn btn-sm btn-success" (click)="save()">
@@ -21,16 +24,38 @@
         </div>
       </div>
     </div>
+    <p *ngIf="statusMsg" class="mess" [class]="statusText()">{{ statusMsg.message }}</p>
     <div class="mb-3">
-      <p *ngIf="statusMsg" class="mess" [class]="statusText()">{{ statusMsg.message }}</p>
       <label for="inputTitle" class="form-label">Título</label>
       <input [(ngModel)]="book.title" [disabled]="!editMode" type="text" class="form-control" id="inputTitle">
     </div>
-    <div class="mb-3" *ngIf="authors && !newMode">
-      <label class="form-label">Autores</label>
-      <ul class="list-group">
-        <li *ngFor="let author of authors" class="list-group-item">{{ author.name }}</li>
-      </ul>
+  </div>
+</div>
+
+<div class="card mt-2" *ngIf="authors && !newMode && !editMode">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h5 class="card-title m-0">Autores del libro</h5>
+      </div>
+      <div class="col-auto" *ngIf="admin()">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-primary" (click)="sync()">
+            <fa-icon [icon]="faSync"></fa-icon>
+          </button>
+          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-success">
+            <fa-icon [icon]="faLink"></fa-icon>
+          </button>
+        </div>
+      </div>
     </div>
+    <ul class="list-group mt-2">
+      <li *ngFor="let author of authors" class="list-group-item">
+        {{ author.name }}
+        <button *ngIf="admin()" type="button" class="btn btn-sm btn-danger" (click)="removeAuthor(author._id)">
+          <fa-icon [icon]="faUnlink"></fa-icon>
+        </button>
+      </li>
+    </ul>
   </div>
 </div>

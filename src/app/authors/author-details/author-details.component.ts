@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { faEdit, faSave, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave, faTimes, faTrash, faSync, faLink, faUnlink } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Author, AuthorsService } from '../authors.service';
 import { Book } from 'src/app/books/books.service';
@@ -24,7 +24,11 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
   faSave = faSave;
   faTimes = faTimes;
   faTrash = faTrash;
+  faSync = faSync;
+  faLink = faLink;
+  faUnlink = faUnlink;
 
+  authorID: string;
   author: Author;
   books: Book[];
 
@@ -42,6 +46,11 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
 
   admin = () => this.auth.admin();
 
+  sync(): void {
+    this.service.find(this.authorID).then(author => this.author = author);
+    this.service.indexBooks(this.authorID).then(books => this.books = books);
+  }
+
   statusText(): string {
     if (!this.statusMsg) {
       return '';
@@ -54,11 +63,12 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
       if (params.id) {
         this.editMode = false;
         this.newMode = false;
-        this.service.find(params.id).then(author => this.author = author);
-        this.service.indexBooks(params.id).then(books => this.books = books);
+        this.authorID = params.id;
+        this.sync();
       } else {
         this.editMode = true;
         this.newMode = true;
+        this.authorID = '';
         this.author = {
           _id: 'new',
           name: '',
@@ -72,7 +82,6 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
   save(): void {
     if (this.newMode) {
       this.service.create(this.author).then(author => {
-        console.log('created');
         this.service.index().then(i => this.router.navigateByUrl(`/app/authors/${author._id}`));
       }).catch(err => {
         this.statusMsg = { status: 'danger', message: err.error.message };
@@ -81,7 +90,7 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
       this.service.update(this.author).then(author => {
         this.editMode = false;
         this.author = author;
-        console.log('updated');
+        this.service.index().then();
       }).catch(err => {
         this.statusMsg = { status: 'danger', message: err.error.message };
       });
@@ -91,6 +100,14 @@ export class AuthorDetailsComponent implements OnInit, OnDestroy {
   delete(): void {
     this.service.delete(this.author).then(() => {
       this.service.index().then(i => this.router.navigateByUrl('/app/authors'));
+    }).catch(err => {
+      this.statusMsg = { status: 'danger', message: err.error.message };
+    });
+  }
+
+  removeBook(book: string): void {
+    this.service.removeBook(this.authorID, book).then(() => {
+      this.sync();
     }).catch(err => {
       this.statusMsg = { status: 'danger', message: err.error.message };
     });

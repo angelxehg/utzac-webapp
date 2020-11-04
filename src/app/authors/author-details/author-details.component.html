@@ -6,7 +6,10 @@
       </div>
       <div class="col-auto" *ngIf="admin()">
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-primary" (click)="editMode = true">
+          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-primary" (click)="sync()">
+            <fa-icon [icon]="faSync"></fa-icon>
+          </button>
+          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-secondary" (click)="editMode = true">
             <fa-icon [icon]="faEdit"></fa-icon>
           </button>
           <button *ngIf="editMode" type="button" class="btn btn-sm btn-success" (click)="save()">
@@ -30,11 +33,33 @@
       <label for="inputCountry" class="form-label">País</label>
       <input [(ngModel)]="author.country" [disabled]="!editMode" type="text" class="form-control" id="inputCountry">
     </div>
-    <div class="mb-3" *ngIf="books && !newMode">
-      <label class="form-label">Libros</label>
-      <ul class="list-group">
-        <li *ngFor="let book of books" class="list-group-item">{{ book.title }}</li>
-      </ul>
+  </div>
+</div>
+
+<div class="card mt-2" *ngIf="books && !newMode && !editMode">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h5 class="card-title m-0">Libros del autor</h5>
+      </div>
+      <div class="col-auto" *ngIf="admin()">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-primary" (click)="sync()">
+            <fa-icon [icon]="faSync"></fa-icon>
+          </button>
+          <button *ngIf="!editMode" type="button" class="btn btn-sm btn-success">
+            <fa-icon [icon]="faLink"></fa-icon>
+          </button>
+        </div>
+      </div>
     </div>
+    <ul class="list-group mt-2">
+      <li *ngFor="let book of books" class="list-group-item">
+        {{ book.title }}
+        <button *ngIf="admin()" type="button" class="btn btn-sm btn-danger" (click)="removeBook(book._id)">
+          <fa-icon [icon]="faUnlink"></fa-icon>
+        </button>
+      </li>
+    </ul>
   </div>
 </div>

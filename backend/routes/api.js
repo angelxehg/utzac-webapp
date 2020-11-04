@@ -31,7 +31,8 @@ router.route('/authors/:author')
 
 router.route('/authors/:author/books')
   .get(auth.logged, authorBooks.indexBooks)
-  .post(auth.admin, authorBooks.associate)
+  .post(auth.admin, authorBooks.associate);
+router.route('/authors/:author/books/:book')
   .delete(auth.admin, authorBooks.unlink);
 
 router.route('/books')
@@ -45,7 +46,8 @@ router.route('/books/:book')
 
 router.route('/books/:book/authors')
   .get(auth.logged, authorBooks.indexAuthors)
-  .post(auth.admin, authorBooks.associate)
+  .post(auth.admin, authorBooks.associate);
+router.route('/books/:book/authors/:author')
   .delete(auth.admin, authorBooks.unlink);
 
 module.exports = router;

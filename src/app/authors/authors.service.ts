@@ -75,7 +75,14 @@ export class AuthorsService {
 
   public indexBooks(id: string): Promise<Book[]> {
     return this.http.get<AuthorBookResponse[]>(`${this.api}/authors/${id}/books`).pipe(
+      map(res => res.filter(item => item.book !== null)),
       map(res => res.map(item => item.book))
+    ).toPromise();
+  }
+
+  public removeBook(author: string, book: string): Promise<boolean> {
+    return this.http.delete(`${this.api}/authors/${author}/books/${book}`).pipe(
+      map(r => true)
     ).toPromise();
   }
 }
