@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
       this.auth.register(this.credential).then(user => {
         this.statusMsg = { status: 'success', message: 'Registro correcto' };
         setTimeout((router: Router) => {
-          router.navigateByUrl('/auth/login');
+          router.navigateByUrl(`/auth/login?email=${user.email}`);
         }, 1000, this.router);
       }).catch(err => {
         this.statusMsg = { status: 'danger', message: err.error.message };

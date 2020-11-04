@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, Credential } from '../auth.service';
 
 interface ProcessStatus {
@@ -21,7 +21,16 @@ export class LoginComponent implements OnInit {
     password: '',
   };
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    const params = this.route.snapshot.queryParams;
+    if (params.email) {
+      this.credential.email = params.email;
+    }
+  }
 
   ngOnInit(): void {
   }

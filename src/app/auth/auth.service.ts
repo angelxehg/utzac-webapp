@@ -68,19 +68,14 @@ export class AuthService {
     ).toPromise();
   }
 
-  public register(credential: Credential): Promise<boolean> {
+  public register(credential: Credential): Promise<User> {
     if (credential.password === '') {
       throw { error: { message: 'No ingresó una contraseña' } };
     }
     if (credential.password !== credential.passwordConfirmation) {
       throw { error: { message: 'Las contraseñas no coinciden' } };
     }
-    return this.http.post(`${this.api}/api/auth/register`, credential).pipe(
-      map(response => {
-        console.log(response);
-        return true;
-      })
-    ).toPromise();
+    return this.http.post<User>(`${this.api}/api/auth/register`, credential).toPromise();
   }
 
   public logout(): void {
