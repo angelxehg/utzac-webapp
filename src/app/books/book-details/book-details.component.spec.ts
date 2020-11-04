@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BooksService, BooksServiceMock } from '../books.service';
 
 import { BookDetailsComponent } from './book-details.component';
 
@@ -8,9 +10,15 @@ describe('BookDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BookDetailsComponent ]
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [BookDetailsComponent],
+      providers: [
+        { provide: BooksService, useValue: BooksServiceMock }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
