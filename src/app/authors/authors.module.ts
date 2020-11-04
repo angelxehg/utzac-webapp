@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { AuthorsComponent } from './authors.component';
 import { AuthorsRoutingModule } from './authors-routing.module';
 import { AuthorDetailsComponent } from './author-details/author-details.component';
+import { FormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -11,6 +13,8 @@ import { AuthorDetailsComponent } from './author-details/author-details.componen
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    FontAwesomeModule,
     AuthorsRoutingModule
   ]
 })

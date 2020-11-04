@@ -1,6 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 export interface Author {
   _id: string;
@@ -10,7 +12,11 @@ export interface Author {
 
 export const AuthorsServiceMock = {
   items$: of([]),
-  find: (id: string) => of(null)
+  index: () => of(null).toPromise(),
+  create: (author: Author) => of(null).toPromise(),
+  find: (id: string) => of(null).toPromise(),
+  update: (author: Author) => of(null).toPromise(),
+  delete: (author: Author) => of(true).toPromise()
 };
 
 @Injectable({
@@ -18,26 +24,46 @@ export const AuthorsServiceMock = {
 })
 export class AuthorsService {
 
+  private api = environment.apiUrl;
+
   public items$ = new BehaviorSubject<Author[]>([]);
 
-  constructor() {
-    const authors: Author[] = [1, 2, 3].map(n => {
-      return {
-        _id: `book-id-${n}`,
-        name: `Autor número ${n}`,
-        country: 'Meméxico'
-      };
-    });
-    this.items$.next(authors);
+  constructor(private http: HttpClient) {
+    try {
+      const authors: Author[] = JSON.parse(localStorage.getItem('BOOKS'));
+      this.items$.next(authors);
+    } catch (error) {
+      localStorage.removeItem('BOOKS');
+    }
+  }
+
+  public index(): Promise<Author[]> {
+    return this.http.get<Author[]>(`${this.api}/authors`).pipe(
+      map(data => {
+        this.items$.next(data);
+        localStorage.setItem('BOOKS', JSON.stringify(data));
+        return data;
+      })
+    ).toPromise();
+  }
+
+  public create(author: Author): Promise<Author> {
+    return this.http.post<Author>(`${this.api}/authors`, author).toPromise();
   }
 
   public find(id: string): Promise<Author> {
-    return this.items$.pipe(
-      take(1),
-      map(all => {
-        const item = all.find(e => e._id === id);
-        return item;
-      })
+    return this.http.get<Author>(`${this.api}/authors/${id}`).toPromise();
+  }
+
+  public update(author: Author): Promise<Author> {
+    const id = author._id;
+    return this.http.put<Author>(`${this.api}/authors/${id}`, author).toPromise();
+  }
+
+  public delete(author: Author): Promise<boolean> {
+    const id = author._id;
+    return this.http.delete(`${this.api}/authors/${id}`).pipe(
+      map(r => true)
     ).toPromise();
   }
 }
