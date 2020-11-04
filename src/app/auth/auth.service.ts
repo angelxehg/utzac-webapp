@@ -49,6 +49,13 @@ export class AuthService {
     return this.currentUser;
   }
 
+  public admin(): boolean {
+    if (!this.currentUser) {
+      return false;
+    }
+    return this.currentUser.role === 'ROLE_ADMIN';
+  }
+
   public token = () => this.currentToken;
 
   private solveToken(token: string): User {

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { faEdit, faSave, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Book, BooksService } from '../books.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-book-details',
@@ -24,10 +25,13 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   paramSubscription: Subscription;
 
   constructor(
+    private auth: AuthService,
     private service: BooksService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
+
+  admin = () => this.auth.admin();
 
   ngOnInit(): void {
     this.paramSubscription = this.route.params.subscribe(params => {

@@ -11,7 +11,7 @@
               <button type="button" class="btn btn-sm btn-primary" (click)="index()">
                 <fa-icon [icon]="faSync"></fa-icon>
               </button>
-              <a type="button" class="btn btn-sm btn-success" routerLink="new">
+              <a *ngIf="admin()" type="button" class="btn btn-sm btn-success" routerLink="new">
                 <fa-icon [icon]="faPlus"></fa-icon>
               </a>
             </div>
