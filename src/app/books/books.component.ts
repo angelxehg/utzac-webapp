@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BooksService } from './books.service';
-import { faSync } from '@fortawesome/free-solid-svg-icons';
+import { faSync, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-books',
@@ -10,6 +10,7 @@ import { faSync } from '@fortawesome/free-solid-svg-icons';
 export class BooksComponent implements OnInit {
 
   faSync = faSync;
+  faPlus = faPlus;
 
   public items = this.service.items$;
 
@@ -18,5 +19,7 @@ export class BooksComponent implements OnInit {
   ngOnInit(): void {
     this.service.index().then();
   }
+
+  index = () => this.service.index();
 
 }

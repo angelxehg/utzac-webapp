@@ -2,8 +2,21 @@
   <div class="col-5 col-lg-3 col-md-4 p-0 pl-2 pr-2">
     <div class="card mb-2">
       <div class="card-body">
-        <h5 class="card-title m-0">Todos los libros</h5>
-        <fa-icon [icon]="faSync"></fa-icon>
+        <div class="row align-items-center">
+          <div class="col">
+            <h5 class="card-title m-0">Todos los libros</h5>
+          </div>
+          <div class="col-auto">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-sm btn-primary" (click)="index()">
+                <fa-icon [icon]="faSync"></fa-icon>
+              </button>
+              <a type="button" class="btn btn-sm btn-success" routerLink="new">
+                <fa-icon [icon]="faPlus"></fa-icon>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <ul class="list-group">
