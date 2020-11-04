@@ -5,7 +5,18 @@ import { PanelComponent } from './panel.component';
 const routes: Routes = [
   {
     path: '',
-    component: PanelComponent
+    redirectTo: 'books',
+    pathMatch: 'prefix'
+  },
+  {
+    path: '',
+    component: PanelComponent,
+    children: [
+      {
+        path: 'books',
+        loadChildren: () => import('../books/books.module').then(m => m.BooksModule)
+      }
+    ]
   },
 ];
 
