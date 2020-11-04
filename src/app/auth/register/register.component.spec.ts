@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AuthService, AuthServiceMock } from '../auth.service';
 
 import { RegisterComponent } from './register.component';
 
@@ -8,9 +9,12 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegisterComponent ]
+      declarations: [RegisterComponent],
+      providers: [
+        { provide: AuthService, useValue: AuthServiceMock }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

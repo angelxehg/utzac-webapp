@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AuthService, AuthServiceMock } from '../auth/auth.service';
 
 import { PanelComponent } from './panel.component';
 
@@ -8,9 +9,12 @@ describe('PanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PanelComponent ]
+      declarations: [PanelComponent],
+      providers: [
+        { provide: AuthService, useValue: AuthServiceMock }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

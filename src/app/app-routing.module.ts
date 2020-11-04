@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'auth',
+    redirectTo: 'app',
     pathMatch: 'prefix'
   },
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
   {
     path: 'app',
     loadChildren: () => import('./panel/panel.module').then(m => m.PanelModule),
+    canActivate: [AuthGuard]
   }
 ];
 
