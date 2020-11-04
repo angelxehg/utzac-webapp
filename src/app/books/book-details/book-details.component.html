@@ -59,10 +59,16 @@
     </div>
     <ul class="list-group mt-2">
       <li *ngFor="let author of authors" class="list-group-item">
-        {{ author.name }}
-        <button *ngIf="admin()" type="button" class="btn btn-sm btn-danger" (click)="removeAuthor(author._id)">
-          <fa-icon [icon]="faUnlink"></fa-icon>
-        </button>
+        <div class="row align-items-center">
+          <div class="col">
+            <a [routerLink]="'/app/authors/' + author._id">{{ author.name }}</a>
+          </div>
+          <div class="col-auto pl-0 pr-1" *ngIf="admin()">
+            <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeAuthor(author._id)">
+              <fa-icon [icon]="faUnlink"></fa-icon>
+            </button>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
