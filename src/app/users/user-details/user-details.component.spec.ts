@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { UsersService, UsersServiceMock } from '../users.service';
 
 import { UserDetailsComponent } from './user-details.component';
 
@@ -8,9 +10,15 @@ describe('UserDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserDetailsComponent ]
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [UserDetailsComponent],
+      providers: [
+        { provide: UsersService, useValue: UsersServiceMock }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

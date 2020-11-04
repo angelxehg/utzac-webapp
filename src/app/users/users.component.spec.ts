@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { UsersComponent } from './users.component';
+import { UsersService, UsersServiceMock } from './users.service';
 
 describe('UsersComponent', () => {
   let component: UsersComponent;
@@ -8,9 +10,15 @@ describe('UsersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UsersComponent ]
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [UsersComponent],
+      providers: [
+        { provide: UsersService, useValue: UsersServiceMock }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
