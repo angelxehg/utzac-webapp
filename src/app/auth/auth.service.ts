@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { User } from '../users/users.service';
 
 const jwt = new JwtHelperService();
@@ -29,7 +30,7 @@ interface TokenResponse {
 })
 export class AuthService {
 
-  private api = 'http://localhost:8000';
+  private api = environment.apiUrl;
 
   private currentUser: User;
 
@@ -59,7 +60,7 @@ export class AuthService {
   }
 
   public login(credential: Credential): Promise<User> {
-    return this.http.post<TokenResponse>(`${this.api}/api/auth/login`, credential).pipe(
+    return this.http.post<TokenResponse>(`${this.api}/auth/login`, credential).pipe(
       map(response => {
         this.currentUser = this.solveToken(response.token);
         localStorage.setItem('JWT_TOKEN', response.token);
@@ -75,7 +76,7 @@ export class AuthService {
     if (credential.password !== credential.passwordConfirmation) {
       throw { error: { message: 'Las contraseñas no coinciden' } };
     }
-    return this.http.post<User>(`${this.api}/api/auth/register`, credential).toPromise();
+    return this.http.post<User>(`${this.api}/auth/register`, credential).toPromise();
   }
 
   public logout(): void {
