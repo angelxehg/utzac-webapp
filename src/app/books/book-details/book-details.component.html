@@ -22,6 +22,7 @@
       </div>
     </div>
     <div class="mb-3">
+      <p *ngIf="statusMsg" class="mess" [class]="statusText()">{{ statusMsg.message }}</p>
       <label for="inputTitle" class="form-label">Título</label>
       <input [(ngModel)]="book.title" [disabled]="!editMode" type="text" class="form-control" id="inputTitle">
     </div>

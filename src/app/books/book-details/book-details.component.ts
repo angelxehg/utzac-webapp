@@ -5,12 +5,19 @@ import { faEdit, faSave, faTimes, faTrash } from '@fortawesome/free-solid-svg-ic
 import { Book, BooksService } from '../books.service';
 import { AuthService } from 'src/app/auth/auth.service';
 
+interface ProcessStatus {
+  status: string;
+  message: string;
+}
+
 @Component({
   selector: 'app-book-details',
   templateUrl: './book-details.component.html',
   styleUrls: ['./book-details.component.scss']
 })
 export class BookDetailsComponent implements OnInit, OnDestroy {
+
+  statusMsg: ProcessStatus;
 
   faEdit = faEdit;
   faSave = faSave;
@@ -32,6 +39,13 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   admin = () => this.auth.admin();
+
+  statusText(): string {
+    if (!this.statusMsg) {
+      return '';
+    }
+    return `text-${this.statusMsg.status}`;
+  }
 
   ngOnInit(): void {
     this.paramSubscription = this.route.params.subscribe(params => {
@@ -56,7 +70,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
         console.log('created');
         this.service.index().then(i => this.router.navigateByUrl(`/app/books/${book._id}`));
       }).catch(err => {
-        console.log(err);
+        this.statusMsg = { status: 'danger', message: err.error.message };
       });
     } else {
       this.service.update(this.book).then(book => {
@@ -64,7 +78,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
         this.book = book;
         console.log('updated');
       }).catch(err => {
-        console.log(err);
+        this.statusMsg = { status: 'danger', message: err.error.message };
       });
     }
   }
@@ -73,7 +87,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
     this.service.delete(this.book).then(() => {
       this.service.index().then(i => this.router.navigateByUrl('/app/books'));
     }).catch(err => {
-      console.log(err);
+      this.statusMsg = { status: 'danger', message: err.error.message };
     });
   }
 
