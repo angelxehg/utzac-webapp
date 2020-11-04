@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { faEdit, faSave, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Book, BooksService } from '../books.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Author } from 'src/app/authors/authors.service';
 
 interface ProcessStatus {
   status: string;
@@ -25,6 +26,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   faTrash = faTrash;
 
   book: Book;
+  authors: Author[];
 
   editMode = false;
   newMode = false;
@@ -53,6 +55,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
         this.editMode = false;
         this.newMode = false;
         this.service.find(params.id).then(book => this.book = book);
+        this.service.indexAuthors(params.id).then(authors => this.authors = authors);
       } else {
         this.editMode = true;
         this.newMode = true;
@@ -60,6 +63,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
           _id: 'new',
           title: ''
         };
+        this.authors = null;
       }
     });
   }

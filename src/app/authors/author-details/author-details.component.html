@@ -30,5 +30,11 @@
       <label for="inputCountry" class="form-label">País</label>
       <input [(ngModel)]="author.country" [disabled]="!editMode" type="text" class="form-control" id="inputCountry">
     </div>
+    <div class="mb-3" *ngIf="books && !newMode">
+      <label class="form-label">Libros</label>
+      <ul class="list-group">
+        <li *ngFor="let book of books" class="list-group-item">{{ book.title }}</li>
+      </ul>
+    </div>
   </div>
 </div>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Book } from '../books/books.service';
 
 export interface Author {
   _id: string;
@@ -18,6 +19,11 @@ export const AuthorsServiceMock = {
   update: (author: Author) => of(null).toPromise(),
   delete: (author: Author) => of(true).toPromise()
 };
+
+interface AuthorBookResponse {
+  author: string;
+  book: Book;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +70,12 @@ export class AuthorsService {
     const id = author._id;
     return this.http.delete(`${this.api}/authors/${id}`).pipe(
       map(r => true)
+    ).toPromise();
+  }
+
+  public indexBooks(id: string): Promise<Book[]> {
+    return this.http.get<AuthorBookResponse[]>(`${this.api}/authors/${id}/books`).pipe(
+      map(res => res.map(item => item.book))
     ).toPromise();
   }
 }

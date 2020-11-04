@@ -26,5 +26,11 @@
       <label for="inputTitle" class="form-label">Título</label>
       <input [(ngModel)]="book.title" [disabled]="!editMode" type="text" class="form-control" id="inputTitle">
     </div>
+    <div class="mb-3" *ngIf="authors && !newMode">
+      <label class="form-label">Autores</label>
+      <ul class="list-group">
+        <li *ngFor="let author of authors" class="list-group-item">{{ author.name }}</li>
+      </ul>
+    </div>
   </div>
 </div>
