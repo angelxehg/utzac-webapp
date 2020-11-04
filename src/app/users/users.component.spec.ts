@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { AuthService, AuthServiceMock } from '../auth/auth.service';
 
 import { UsersComponent } from './users.component';
 import { UsersService, UsersServiceMock } from './users.service';
@@ -15,6 +16,7 @@ describe('UsersComponent', () => {
       ],
       declarations: [UsersComponent],
       providers: [
+        { provide: AuthService, useValue: AuthServiceMock },
         { provide: UsersService, useValue: UsersServiceMock }
       ]
     })

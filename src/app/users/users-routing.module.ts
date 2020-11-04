@@ -9,11 +9,11 @@ const routes: Routes = [
     component: UsersComponent,
     children: [
       {
-        path: ':id',
+        path: 'new',
         component: UserDetailsComponent
       },
       {
-        path: 'new',
+        path: ':id',
         component: UserDetailsComponent
       }
     ]
