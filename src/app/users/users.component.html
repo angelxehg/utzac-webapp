@@ -6,22 +6,18 @@
       </div>
     </div>
     <ul class="list-group">
-      <li class="list-group-item">Cras justo odio</li>
-      <li class="list-group-item">Dapibus ac facilisis in</li>
-      <li class="list-group-item">Morbi leo risus</li>
-      <li class="list-group-item">Porta ac consectetur ac</li>
-      <li class="list-group-item">Vestibulum at eros</li>
+      <a class="list-group-item list-group-item-action" routerLink="1" routerLinkActive="active">
+        Cras justo odio
+      </a>
+      <a class="list-group-item list-group-item-action" routerLink="2" routerLinkActive="active">
+        Dapibus ac facilisis in
+      </a>
+      <a class="list-group-item list-group-item-action" routerLink="3" routerLinkActive="active">
+        Morbi leo risus
+      </a>
     </ul>
   </div>
   <div class="col-7 col-lg-9 col-md-8 p-0 pr-2">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Datos del usuario</h5>
-        <img src="https://github.com/angelxehg.png?size=150" class="rounded mb-2" alt="...">
-        <p class="card-text">Nombre: Angel Hurtado</p>
-        <p class="card-text">Correo: contact@angelxehg.com</p>
-        <p class="card-text">Roles: admin</p>
-      </div>
-    </div>
+    <router-outlet></router-outlet>
   </div>
 </div>
