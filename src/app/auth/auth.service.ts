@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+// import { JwtHelperService } from "@auth0/angular-jwt";
+import { map } from 'rxjs/operators';
 import { User } from '../users/users.service';
 
 export const AuthServiceMock = {
@@ -15,19 +18,23 @@ export interface Credential {
   passwordConfirmation?: string;
 }
 
+interface TokenResponse {
+  token: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private api = 'http://localhost:8000';
+
   private currentUser: User;
 
-  constructor(private router: Router) {
-    try {
-      const user: User = JSON.parse(localStorage.getItem('USER_DATA'));
-      this.currentUser = user;
-    } catch (error) {
-      this.currentUser = null;
+  constructor(private http: HttpClient, private router: Router) {
+    const token = localStorage.getItem('JWT_TOKEN');
+    if (token) {
+      this.currentUser = this.solveToken(token);
     }
   }
 
@@ -38,16 +45,24 @@ export class AuthService {
     return this.currentUser;
   }
 
-  public login(credential: Credential): void {
-    this.currentUser = {
+  private solveToken(token: string): User {
+    return {
       _id: 'x',
       name: 'Angel Hurtado',
-      email: credential.email,
+      email: 'contact@angelxehg.com',
       role: 'admin',
       image: 'https://github.com/angelxehg.png?size=150'
     };
-    localStorage.setItem('USER_DATA', JSON.stringify(this.currentUser));
-    this.router.navigateByUrl('/app');
+  }
+
+  public login(credential: Credential): Promise<User> {
+    return this.http.post<TokenResponse>(`${this.api}/api/auth/login`, credential).pipe(
+      map(response => {
+        this.currentUser = this.solveToken(response.token);
+        localStorage.setItem('JWT_TOKEN', response.token);
+        return this.currentUser;
+      })
+    ).toPromise();
   }
 
   public register(credential: Credential): void {
@@ -57,20 +72,11 @@ export class AuthService {
     if (credential.password !== credential.passwordConfirmation) {
       return;
     }
-    this.currentUser = {
-      _id: 'x',
-      name: credential.name,
-      email: credential.email,
-      role: 'admin',
-      image: 'https://github.com/angelxehg.png?size=150'
-    };
-    localStorage.setItem('USER_DATA', JSON.stringify(this.currentUser));
-    this.router.navigateByUrl('/app');
   }
 
   public logout(): void {
     this.currentUser = null;
-    localStorage.removeItem('USER_DATA');
+    localStorage.removeItem('JWT_TOKEN');
     this.router.navigateByUrl('/auth');
   }
 }
