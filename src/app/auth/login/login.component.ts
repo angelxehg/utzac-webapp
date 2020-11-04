@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit {
         router.navigateByUrl('/app');
       }, 1000, this.router);
     }).catch(err => {
-      console.log(err);
       this.statusMsg = { status: 'danger', message: err.error.message };
     });
   }

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { BooksComponent } from './books.component';
 import { BooksRoutingModule } from './books-routing.module';
 import { BookDetailsComponent } from './book-details/book-details.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -11,7 +13,9 @@ import { BookDetailsComponent } from './book-details/book-details.component';
   ],
   imports: [
     CommonModule,
-    BooksRoutingModule
+    FormsModule,
+    BooksRoutingModule,
+    FontAwesomeModule
   ]
 })
 export class BooksModule { }

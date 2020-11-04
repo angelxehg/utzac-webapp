@@ -9,11 +9,11 @@ const routes: Routes = [
     component: BooksComponent,
     children: [
       {
-        path: ':id',
+        path: 'new',
         component: BookDetailsComponent
       },
       {
-        path: 'new',
+        path: ':id',
         component: BookDetailsComponent
       }
     ]
