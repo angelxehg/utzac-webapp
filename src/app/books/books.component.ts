@@ -13,6 +13,7 @@ export class BooksComponent implements OnInit {
   constructor(private service: BooksService) { }
 
   ngOnInit(): void {
+    this.service.index().then();
   }
 
 }

@@ -36,7 +36,7 @@ export class InterceptorService implements HttpInterceptor {
     }
     console.log('Request intercepted');
     request = req.clone({
-      setHeaders: { authorization: `Bearer ${token}` }
+      setHeaders: { authorization: `${token}` }
     });
     return next.handle(request);
   }
