@@ -11,7 +11,11 @@ export interface Book {
 
 export const BooksServiceMock = {
   items$: of([]),
-  find: (id: string) => of(null)
+  index: () => of(null).toPromise(),
+  create: (book: Book) => of(null).toPromise(),
+  find: (id: string) => of(null).toPromise(),
+  update: (book: Book) => of(null).toPromise(),
+  delete: (book: Book) => of(true).toPromise()
 };
 
 @Injectable({

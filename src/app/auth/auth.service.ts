@@ -10,7 +10,10 @@ const jwt = new JwtHelperService();
 
 export const AuthServiceMock = {
   user: () => null,
+  admin: () => false,
+  token: () => '',
   login: () => { },
+  register: () => { },
   logout: () => { }
 };
 
