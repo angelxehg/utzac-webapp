@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-// import { JwtHelperService } from "@auth0/angular-jwt";
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs/operators';
 import { User } from '../users/users.service';
+
+const jwt = new JwtHelperService();
 
 export const AuthServiceMock = {
   user: () => null,
@@ -46,12 +48,13 @@ export class AuthService {
   }
 
   private solveToken(token: string): User {
+    const decoded = jwt.decodeToken(token);
     return {
-      _id: 'x',
-      name: 'Angel Hurtado',
-      email: 'contact@angelxehg.com',
-      role: 'admin',
-      image: 'https://github.com/angelxehg.png?size=150'
+      _id: decoded.user,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role,
+      image: decoded.image
     };
   }
 
