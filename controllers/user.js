@@ -18,10 +18,19 @@ const register = (req, res, next) => {
   if (params.password == '' || params.password == null) {
     throw error.badRequest('Missing parameter password');
   }
+  if (params.passwordConfirmation == '' || params.passwordConfirmation == null) {
+    throw error.badRequest('Missing parameter passwordConfirmation');
+  }
+  if (params.password !== params.passwordConfirmation) {
+    throw error.badRequest('Passwords don\' match');
+  }
+  if (params.image == '' || params.image == null) {
+    throw error.badRequest('Missing parameter image');
+  }
   user.name = params.name;
   user.email = params.email;
   user.role = 'ROLE_USER';
-  user.image = 'null'
+  user.image = params.image;
   bcrypt.hash(params.password, null, null, (err, hash) => {
     if (err) {
       throw error.badRequest('Couldn\'t encrypt password');
@@ -81,12 +90,16 @@ const update = (req, res, next) => {
   if (params.email == '' || params.email == null) {
     throw error.badRequest('Missing parameter email');
   }
+  if (params.image == '' || params.image == null) {
+    throw error.badRequest('Missing parameter image');
+  }
   return User.findById(id).then(user => {
     if (!user) {
       throw error.notFound('No user found');
     }
     user.name = params.name;
     user.email = params.email;
+    user.image = params.image;
     if (params.password) {
       bcrypt.hash(params.password, null, null, function (err, hash) {
         if (err) {
